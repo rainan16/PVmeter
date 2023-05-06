@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <body>
+    <canvas id="myChart" style="width: 100%"></canvas>
+
+    <script>
+      const ctx = document.getElementById('myChart');
+
+
+      var xyValues;
+      (async () => {
+        xyValues = await getSeries();
+
+        var labels = xyValues.map(function (e) {
+          return new Date(e.timestamp);
+        });
+        var data = xyValues.map(function (e) {
+          return e.power;
+        });
+
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "PV",
+                data: data,
+                backgroundColor: "rgba(0, 119, 204, 0.3)",
+              },
+            ],
+          },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Balcony PV power'
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                },
+                scales: {
+                    x: {
+                        type: "time",
+                        min: removeDays(Date.now(),2),
+                        display: true,
+                        title: {
+                            display: true
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                        display: true,
+                            text: 'Watt'
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 800
+                    }
+                }
+            },
+        });
+      })();
+
+      function removeDays(date, days) {
+        var result = new Date(date);
+        result.setDate(result.getDate() - days);
+        return result;
+    }
+
+      async function getSeries() {
+        let url = "https://pvmeter.azurewebsites.net/api/get-data-series";
+        let obj = await (await fetch(url)).json();
+
+        return obj;
+      }
+    </script>
+  </body>
+</html>

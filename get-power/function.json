@@ -1,0 +1,28 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "get"
+      ]
+    },
+    {
+      "name": "cosmos",
+      "type": "cosmosDB",
+      "direction": "out",
+      "ConnectionStringSetting": "CosmosDbConnectionString",
+      "databaseName": "pvpower",
+      "collectionName": "pvpower-container",
+      "createIfNotExists": true
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "$return"
+    }
+  ]
+}

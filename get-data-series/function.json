@@ -1,0 +1,28 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "get"
+      ]
+    },
+    {
+      "name": "cosmositems",
+      "type": "cosmosDB",
+      "direction": "in",
+      "ConnectionStringSetting": "CosmosDbConnectionString",
+      "databaseName": "pvpower",
+      "collectionName": "pvpower-container",
+      "sqlQuery": "SELECT c.timestamp, c.power FROM c order by c.timestamp"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "$return"
+    }
+  ]
+}
